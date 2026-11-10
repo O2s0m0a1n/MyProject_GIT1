@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light" data-lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مكتبة قراءة | Qirāʿa Library — كتب، قصص، مجلات، دوريات ومسموعات</title>
+<meta name="description" content="مكتبة قراءة الرقمية: آلاف الكتب والقصص والمجلات والدوريات العلمية والكتب المسموعة، مع أدوات قراءة ذكية ووضع ليلي ولغتين.">
+<meta name="theme-color" content="#0E5A4A">
+<meta property="og:title" content="مكتبة قراءة | Qirāʿa Library">
+<meta property="og:description" content="المكتبة التي تقرأ معك — كتب، قصص، مجلات، مسموعات وأدوات قارئ.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230E5A4A'/%3E%3Cpath d='M7 9h8v16H7zM17 9h8v16h-8z' fill='%23C08A2E' opacity='.9'/%3E%3Cpath d='M15 9v16' stroke='%23F7F4ED' stroke-width='2'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Amiri:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Bootstrap 5 (يُبدَّل تلقائياً بين RTL و LTR) -->
+<link id="bootstrapCss" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ══ طبقة الحبر/الحبيبات ══ -->
+<div class="grain-layer" aria-hidden="true"></div>
+<div class="scroll-progress" aria-hidden="true"><span id="scrollBar"></span></div>
+
+<!-- ══════════ الشريط العلوي ══════════ -->
+<div class="topbar d-none d-lg-block">
+  <div class="container-xxl">
+    <div class="topbar-in">
+      <span class="tb-item"><i class="bi bi-broadcast-pin"></i> <b id="openState" data-i18n="tb_open">المكتبة مفتوحة</b> · <span class="mono" id="tbClock">--:--</span></span>
+      <div class="tb-live"><div class="tb-live-track" id="liveTicker"></div></div>
+      <div class="tb-tools">
+        <div class="tb-font" role="group" aria-label="حجم الخط">
+          <button class="tb-btn" data-font="-1" title="تصغير الخط"><i class="bi bi-dash"></i></button>
+          <span class="mono tb-fontval" id="fontVal">100%</span>
+          <button class="tb-btn" data-font="1" title="تكبير الخط"><i class="bi bi-plus"></i></button>
+        </div>
+        <button class="tb-btn" id="themeBtn" title="الوضع الليلي"><i class="bi bi-moon-stars"></i></button>
+        <button class="tb-btn tb-lang" id="langBtn"><span class="mono">EN</span></button>
+        <button class="tb-btn" data-open-auth="guest" title="دخول كزائر"><i class="bi bi-person-walking"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ الـ Navbar ══════════ -->
+<header class="navwrap" id="navwrap">
+<nav class="navbar navbar-expand-xl">
+  <div class="container-xxl">
+    <a class="brand" href="#home">
+      <span class="brand-mark" aria-hidden="true">
+        <i></i><i></i><i></i><i></i>
+      </span>
+      <span class="brand-txt">
+        <b data-i18n="brand">مكتبة قراءة</b>
+        <small class="mono">QIRĀʿA · EST. 2013</small>
+      </span>
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="القائمة">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="nav-links">
+        <li><a href="#home" data-i18n="nav_home">الرئيسية</a></li>
+        <li><a href="#categories" data-i18n="nav_cats">الأقسام</a></li>
+        <li><a href="#catalog" data-i18n="nav_catalog">الفهرس</a></li>
+        <li><a href="#magazines" data-i18n="nav_mag">المجلات</a></li>
+        <li><a href="#stories" data-i18n="nav_stories">القصص</a></li>
+        <li><a href="#audio" data-i18n="nav_audio">مسموعات</a></li>
+        <li class="has-more">
+          <a href="#desk"><span data-i18n="nav_more">المزيد</span> <i class="bi bi-chevron-down"></i></a>
+          <div class="more-pop">
+            <a href="#desk"><i class="bi bi-journal-text"></i> <span data-i18n="nav_desk">طاولة القارئ</span></a>
+            <a href="#picks"><i class="bi bi-hand-thumbs-up"></i> <span data-i18n="nav_picks">اختيار التحرير</span></a>
+            <a href="#kids"><i class="bi bi-balloon"></i> <span data-i18n="nav_kids">ركن الأطفال</span></a>
+            <a href="#rare"><i class="bi bi-star"></i> <span data-i18n="nav_rare">نصوص نادرة</span></a>
+            <a href="#events"><i class="bi bi-calendar-event"></i> <span data-i18n="nav_events">الندوات</span></a>
+            <a href="#plans"><i class="bi bi-gem"></i> <span data-i18n="nav_plans">العضويات</span></a>
+          </div>
+        </li>
+      </ul>
+
+      <form class="nav-search" id="navSearchForm" autocomplete="off">
+        <i class="bi bi-search"></i>
+        <input type="search" id="navSearch" data-i18n-ph="search_ph" placeholder="ابحث عن كتاب، مؤلف، موضوع…">
+        <kbd class="mono">Ctrl K</kbd>
+      </form>
+
+      <div class="nav-auth">
+        <button class="btn-brass" data-open-auth="login" id="btnLoginTop" data-i18n="btn_login">تسجيل الدخول</button>
+        <button class="btn-ghost-sm" data-open-auth="register" id="btnRegTop" data-i18n="btn_register">حساب جديد</button>
+        <div class="userchip d-none" id="userChip">
+          <button class="userchip-btn" id="userChipBtn" aria-expanded="false">
+            <span class="avatar" id="userAvatar">ق</span>
+            <span class="uname" id="userName">قارئ</span>
+            <i class="bi bi-chevron-down"></i>
+          </button>
+          <div class="userdrop" id="userDrop">
+            <div class="ud-head"><b id="udName">—</b><small class="mono" id="udMail">—</small></div>
+            <a href="#" data-tab-user="wish"><i class="bi bi-heart"></i> <span data-i18n="ud_wish">قائمة القراءة</span> <span class="mono cnt" id="cntWish">0</span></a>
+            <a href="#" data-tab-user="loan"><i class="bi bi-arrow-left-right"></i> <span data-i18n="ud_loan">إعاراتي</span> <span class="mono cnt" id="cntLoan">0</span></a>
+            <a href="#" data-tab-user="bm"><i class="bi bi-bookmark"></i> <span data-i18n="ud_bm">الفواصل</span></a>
+            <a href="#" data-tab-user="notes"><i class="bi bi-pencil"></i> <span data-i18n="ud_notes">ملاحظاتي</span></a>
+            <div class="sep"></div>
+            <a href="#" id="logoutBtn" class="danger"><i class="bi bi-box-arrow-right"></i> <span data-i18n="ud_logout">تسجيل الخروج</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+</header>
+
+<main>
+
+<!-- ══════════ 1 · البطل: مشجر الكتب + خزانة البطاقات ══════════ -->
+<section class="hero" id="home">
+  <div class="hero-rule" aria-hidden="true"></div>
+  <div class="container-xxl">
+    <div class="hero-grid">
+
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="dot-live"></span> <span data-i18n="hero_eyebrow">خزانة رقمية · 128 ألف عنوان · بلا إعلانات</span></p>
+
+        <h1 class="hero-title">
+          <span class="mask"><span class="scramble" data-ar="اقرأ كما لم تفعل من قبل" data-en="Read as never before">اقرأ كما لم تفعل من قبل</span></span>
+          <span class="mask"><em data-i18n="hero_title2">والكتابُ يقرأُك أنت</em></span>
+        </h1>
+
+        <p class="hero-lead" data-i18n="hero_lead">
+          مكتبة قراءة تجمع الرواية والقصة القصيرة والمجلة والدورية العلمية والكتاب المسموع والنادر المطبوع — في مكان واحد، بخطٍّ عربي مضبوط، ووضع ليلي حقيقي، وأدوات قراءة صُمِّمت لمن يقرأ فعلاً لا لمن يتصفّح.
+        </p>
+
+        <form class="hero-search" id="heroSearch">
+          <i class="bi bi-search"></i>
+          <input type="search" id="heroInput" data-i18n-ph="hero_search_ph" placeholder="اكتب اسم الكتاب أو المؤلف أو «خيال علمي»…">
+          <button type="submit" class="btn-ink" data-i18n="hero_btn_search"> ابحث</button>
+        </form>
+
+        <div class="hero-chips">
+          <button class="chip" data-q="جديد" data-i18n="hero_chip_new">أحدث الإضافات</button>
+          <button class="chip" data-filter="free" data-i18n="hero_chip_free">متاح مجاناً</button>
+          <button class="chip" data-filter="audio" data-i18n="hero_chip_audio">مسموع</button>
+          <button class="chip" data-filter="kids" data-i18n="hero_chip_kids">ناشئة</button>
+          <button class="chip" id="blindBtn"><i class="bi bi-shuffle"></i> <span data-i18n="hero_chip_blind">أعمِني واختر لي</span></button>
+        </div>
+
+        <ul class="hero-stats">
+          <li><b class="mono counter" data-count="128460">0</b><span data-i18n="hero_s1">عنوان مفهرس</span></li>
+          <li><b class="mono counter" data-count="47210">0</b><span data-i18n="hero_s2">قارئ نشط</span></li>
+          <li><b class="mono counter" data-count="912">0</b><span data-i18n="hero_s3">مجلة ودورية</span></li>
+          <li><b class="mono counter" data-count="31">0</b><span data-i18n="hero_s4">لغة مترجمة</span></li>
+        </ul>
+      </div>
+
+      <div class="hero-shelf">
+        <!-- المشجر -->
+        <div class="shelf-unit" data-reveal>
+          <div class="shelf-label mono"><span data-i18n="hero_shelf_label">رفّ هذا الأسبوع</span> <i class="bi bi-arrow-down-left"></i></div>
+          <div class="spines" id="spines"></div>
+          <div class="shelf-board"></div>
+        </div>
+
+        <!-- خزانة البطاقات الفهرسية -->
+        <div class="catalog-drawer" data-reveal>
+          <div class="cd-head">
+            <span class="mono cd-tag" data-i18n="hero_drawer_tag">بطاقة فهرسة</span>
+            <span class="mono cd-no" id="cdNo">№ 0001</span>
+          </div>
+          <div class="card-stack" id="cardStack"></div>
+          <div class="cd-foot">
+            <div class="cd-dots" id="cdDots"></div>
+            <button class="btn-brass sm" id="cdNext" data-i18n="hero_drawer_next">البطاقة التالية</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <a class="hero-scroll" href="#categories"><i class="bi bi-chevron-double-down"></i> <span data-i18n="hero_scroll">انزل إلى المخزن</span></a>
+</section>
+
+<!-- ══════════ 2 · شريط التخصصات المتحرك ══════════ -->
+<section class="tickerband" aria-hidden="true">
+  <div class="tk-row"><div class="tk-track" id="tkA"></div></div>
+  <div class="tk-row rev"><div class="tk-track" id="tkB"></div></div>
+</section>
+
+<!-- ══════════ 3 · الأقسام (بنتو) ══════════ -->
+<section class="sec" id="categories">
+  <div class="container-xxl">
+    <header class="sec-head">
+      <span class="sec-num mono">01</span>
+      <div>
+        <h2 class="mask-line"><span data-i18n="cat_title">أقسام المكتبة</span></h2>
+        <p data-i18n="cat_sub">ثمانية أرفف كبرى، وكل رفّ يفتح على عشرات الأرفف الصغيرة.</p>
+      </div>
+      <a class="sec-link" href="#catalog"><span data-i18n="cat_view">كل الفهرس</span> <i class="bi bi-arrow-left"></i></a>
+    </header>
+    <div class="bento" id="bentoGrid"></div>
+  </div>
+</section>
+
+<!-- ══════════ 4 · الفهرس الرئيسي ══════════ -->
+<section class="sec sec-tint" id="catalog">
+  <div class="container-xxl">
+    <header class="sec-head">
+      <span class="sec-num mono">02</span>
+      <div>
+        <h2 class="mask-line"><span data-i18n="col_title">الفهرس الحيّ</span></h2>
+        <p data-i18n="col_sub">فلترة فورية، ترتيب، عرض شبكي أو قائمة — بلا إعادة تحميل الصفحة.</p>
+      </div>
+      <span class="mono result-count" id="resultCount">—</span>
+    </header>
+
+    <div class="col-toolbar">
+      <div class="ct-row">
+        <div class="field-search">
+          <i class="bi bi-search"></i>
+          <input type="search" id="catSearch" data-i18n-ph="col_search_ph" placeholder="ابحث داخل 30 عنواناً…">
+        </div>
+        <div class="field-select">
+          <label class="mono" data-i18n="col_f_cat">التصنيف</label>
+          <select id="catSel"></select>
+        </div>
+        <div class="field-select">
+          <label class="mono" data-i18n="col_f_lang">اللغة</label>
+          <select id="langSel">
+            <option value="all" data-i18n="col_lang_all">الكل</option>
+            <option value="ar" data-i18n="col_lang_ar">العربية</option>
+            <option value="en" data-i18n="col_lang_en">الإنجليزية</option>
+          </select>
+        </div>
+        <div class="field-select">
+          <label class="mono" data-i18n="col_f_sort">الترتيب</label>
+          <select id="sortSel">
+            <option value="pop" data-i18n="col_sort_pop">الأكثر رواجاً</option>
+            <option value="new" data-i18n="col_sort_new">الأحدث</option>
+            <option value="rate" data-i18n="col_sort_rate">الأعلى تقييماً</option>
+            <option value="az" data-i18n="col_sort_az">أ → ي</option>
+            <option value="pages" data-i18n="col_sort_pages">الأقل صفحات</option>
+          </select>
+        </div>
+        <div class="viewtog" role="group">
+          <button class="active" data-view="grid"><i class="bi bi-grid-3x2"></i></button>
+          <button data-view="list"><i class="bi bi-list-ul"></i></button>
+        </div>
+      </div>
+      <div class="ct-chips" id="quickChips">
+        <button class="fchip active" data-filter="all"><span data-i18n="col_all">الكل</span></button>
+        <button class="fchip" data-filter="free"><i class="bi bi-unlock"></i> <span data-i18n="badge_free">مجاني</span></button>
+        <button class="fchip" data-filter="new"><i class="bi bi-stars"></i> <span data-i18n="badge_new">جديد</span></button>
+        <button class="fchip" data-filter="best"><i class="bi bi-fire"></i> <span data-i18n="badge_best">الأكثر إعارة</span></button>
+        <button class="fchip" data-filter="audio"><i class="bi bi-broadcast"></i> <span data-i18n="badge_audio">مسموع</span></button>
+        <button class="fchip" data-filter="rare"><i class="bi bi-award"></i> <span data-i18n="badge_rare">نادر</span></button>
+        <button class="fchip" data-filter="wish"><i class="bi bi-heart"></i> <span data-i18n="col_mywish">قائمتي</span></button>
+        <button class="fchip" data-filter="loan"><i class="bi bi-bag"></i> <span data-i18n="col_myloan">معارتي</span></button>
+      </div>
+    </div>
+
+    <div class="catalog grid" id="bookGrid"></div>
+    <div class="empty-state d-none" id="catEmpty">
+      <i class="bi bi-emoji-dizzy"></i>
+      <h4 data-i18n="col_empty_t">لا شيء بهذا الاسم في المخزن</h4>
+      <p data-i18n="col_empty_p">جرّب كلمة أخرى، أو أزل الفلاتر، أو دعنا نختر لك عشوائياً.</p>
+      <button class="btn-ink" id="resetAll"><i class="bi bi-arrow-counterclockwise"></i> <span data-i18n="col_reset">إعادة الضبط</span></button>
+    </div>
+    <div class="loadmore-wrap">
+      <button class="btn-outline-brass" id="loadMore"><span data-i18n="col_more">اعرض المزيد من الرفّ</span> <i class="bi bi-plus-lg"></i></button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 5 · المجلات والدوريات ══════════ -->
+<section class="sec" id="magazines">
+  <div class="container-xxl">
+    <header class="sec-head">
+      <span class="sec-num mono">03</span>
+      <div>
+        <h2 class="mask-line"><span data-i18n="mag_title">المجلات والدوريات</span></h2>
+        <p data-i18n="mag_sub">عددٌ يتصدّر الواجهة، ومحاكاة «كين بيرنز» تُبقي الغلاف متنفِّساً.</p>
+      </div>
+    </header>
+
+    <div class="mag-layout">
+      <div class="mag-feature" id="magFeature"></div>
+      <div class="mag-rail">
+        <div class="mag-rail-head">
+          <h3 data-i18n="mag_rail_h">الأعداد الأخيرة</h3>
+          <div class="rail-nav">
+            <button id="magPrev" aria-label="السابق"><i class="bi bi-chevron-left"></i></button>
+            <button id="magNext" aria-label="التالي"><i class="bi bi-chevron-right"></i></button>
+          </div>
+        </div>
+        <div class="mag-scroller" id="magScroller"></div>
+        <div class="mag-sub">
+          <i class="bi bi-envelope-paper"></i>
+          <div><b data-i18n="mag_sub_t">اشترك في نشرة الأعداد</b><small data-i18n="mag_sub_p">إشعار فور صدور أي عدد + ملف PDF.</small></div>
+          <button class="btn-brass sm" data-sub="mag" data-i18n="mag_sub_btn">اشترك</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 6 · القصص القصيرة (سلّم مرقّم) ══════════ -->
+<section class="sec sec-tint" id="stories">
+  <div class="container-xxl">
+    <header class="sec-head">
+      <span class="sec-num mono">04</span>
+      <div>
+        <h2 class="mask-line"><span data-i18n="sto_title">سلّم القصص القصيرة</span></h2>
+        <p data-i18n="sto_sub">قص تُقرأ في جلسة واحدة — مع زمن قراءة دقيق لكل نص.</p>
+      </div>
+    </header>
+    <div class="ladder" id="storyLadder"></div>
+  </div>
+</section>
+
+<!-- ══════════ 7 · الكتب المسموعة ══════════ -->
+<section class="sec" id="audio">
+  <div class="container-xxl">
+    <header class="sec-head">
+      <span class="sec-num mono">05</span>
+      <div>
+        <h2 class="mask-line"><span data-i18n="aud_title">غرفة الاستماع</span></h2>
+        <p data-i18n="aud_sub">اضغط تشغيل — سيقرأ لك المتصفح مقتطفاً بصوت نظامك (Web Speech API).</p>
+      </div>
+      <button class="sec-link" id="stopAllAudio"><i class="bi bi-stop-circle"></i> <span data-i18n="aud_stop">إيقاف الكل</span></button>
+    </header>
+    <div class="audio-list" id="audioList"></div>
+  </div>
+</section>
+
+<!-- ══════════ 8 · ركن الناشئة ══════════ -->
+<section class="sec kids-zone" id="kids">
+  <div class="container-xxl">
+    <div class="kids-grid">
+      <div class="kids-copy">
+        <span class="sec-num mono">06</span>
+        <h2 class="mask-line"><span data-i18n="kids_title">ركن «بذرة» للناشئة</span></h2>
+        <p data-i18n="kids_sub">حروف كبيرة، ألوان صريحة، وحكايات ما قبل النوم — مع لعبة «اقلب البطاقة» و«كم كلمة تعرف؟».</p>
+        <div class="kids-tools">
+          <button class="kid-btn" id="kidFlip"><i class="bi bi-collection"></i> <span data-i18n="kids_flip">العب: اقلب البطاقة</span></button>
+          <button class="kid-btn alt" id="kidWord"><i class="bi bi-emoji-laughing"></i> <span data-i18n="kids_word">كلمة اليوم</span></button>
+        </div>
+        <div class="kid-stage" id="kidStage"></div>
+      </div>
+      <div class="kids-shelf" id="kidsShelf"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 9 · طاولة القارئ (عمودان لاصقان) ══════════ -->
+<section class="sec sec-desk" id="desk">
+  <div class="container-xxl">
+    <div class="desk-grid">
+      <aside class="desk-aside">
+        <span class="sec-num mono">07</span>
+        <h2 class="mask-line"><span data-i18n="desk_title">طاولة القارئ</span></h2>
+        <p data-i18n="desk_sub">ست أدوات صغيرة تختصر ساعات: ملاحظات، مؤقّت تركيز، منتقي عشوائي، نطق آلي، قائمة قراءة، وفواصل.</p>
+        <div class="desk-quote">
+          <span class="qmark">”</span>
+          <p data-i18n="desk_quote">الكتابُ قراءةٌ أولى، والملاحظةُ قراءةٌ ثانية، والفهرسةُ قراءةٌ ثالثة.</p>
+          <cite class="mono">— من دفتر المكتبة</cite>
+        </div>
+      </aside>
+
+      <div class="desk-cards">
+        <!-- ملاحظات -->
+        <article class="dcard" data-reveal>
+          <header><i class="bi bi-pencil-square"></i><h3 data-i18n="desk_note_h">دفتر الملاحظات</h3><span class="mono" id="noteCount">0</span></header>
+          <textarea id="noteBox" rows="4" data-i18n-ph="desk_note_ph" placeholder="اقتباس، فكرة، سؤال… (يُحفَظ محلياً)"></textarea>
+          <div class="dcard-act">
+            <button class="btn-ink sm" id="noteSave"><i class="bi bi-save"></i> <span data-i18n="desk_note_save">احفظ</span></button>
+            <button class="btn-ghost sm" id="noteClear"><i class="bi bi-trash3"></i> <span data-i18n="desk_note_clear">أمحُ</span></button>
+          </div>
+          <ul class="note-list" id="noteList"></ul>
+        </article>
+
+        <!-- مؤقّت -->
+        <article class="dcard wide-2" data-reveal>
+          <header><i class="bi bi-hourglass-split"></i><h3 data-i18n="desk_timer_h">مؤقّت الجلسة</h3><span class="mono" id="timerMode">تركيز 25</span></header>
+          <div class="timer-body">
+            <div class="timer-ring">
+              <svg viewBox="0 0 120 120"><circle class="tr-bg" cx="60" cy="60" r="52"/><circle class="tr-fg" id="timerRing" cx="60" cy="60" r="52"/></svg>
+              <b class="mono" id="timerTxt">25:00</b>
+            </div>
+            <div class="timer-side">
+              <div class="seg">
+                <button class="active" data-pomo="25">25</button><button data-pomo="45">45</button><button data-pomo="60">60</button><button data-pomo="5" data-i18n="desk_timer_break">راحة</button>
+              </div>
+              <p class="hint" data-i18n="desk_timer_p">كل جلسة تُضاف إلى تحدي القراءة تلقائياً.</p>
+              <div class="dcard-act">
+                <button class="btn-brass" id="timerStart"><i class="bi bi-play-fill"></i> <span data-i18n="desk_timer_start">ابدأ</span></button>
+                <button class="btn-ghost" id="timerReset"><i class="bi bi-arrow-counterclockwise"></i></button>
+              </div>
+              <div class="sessions">
+                <span class="mono" data-i18n="desk_sessions">جلسات اليوم</span>
+                <div class="sess-dots" id="sessDots"></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- منتقي عشوائي -->
+        <article class="dcard" data-reveal>
+          <header><i class="bi bi-dice-5"></i><h3 data-i18n="desk_random_h">منتقي الحيرة</h3></header>
+          <p class="hint" data-i18n="desk_random_p">لا تعرف ماذا تقرأ؟ دَع الفهرس يقرّر.</p>
+          <button class="btn-ink full" id="deskRandom"><i class="bi bi-shuffle"></i> <span data-i18n="desk_random_btn">اختر لي كتاباً</span></button>
+          <div class="pick-result" id="pickResult"></div>
+        </article>
+
+        <!-- نطق -->
+        <article class="dcard" data-reveal>
+          <header><i class="bi bi-volume-up"></i><h3 data-i18n="desk_tts_h">قارئ صوتي</h3></header>
+          <select id="ttsVoice" class="sel"></select>
+          <label class="rng-lbl mono"><span data-i18n="desk_tts_speed">السرعة</span> <input type="range" id="ttsRate" min="0.6" max="1.6" step="0.1" value="1"><b class="mono" id="ttsRateVal">1.0×</b></label>
+          <div class="dcard-act">
+            <button class="btn-brass sm" id="ttsPlay"><i class="bi bi-play"></i> <span data-i18n="desk_tts_run">اقرأ مقتطف اليوم</span></button>
+            <button class="btn-ghost sm" id="ttsStop"><i class="bi bi-stop"></i></button>
+          </div>
+        </article>
+
+        <!-- قائمة القراءة -->
+        <article class="dcard wide-2" data-reveal>
+          <header><i class="bi bi-list-check"></i><h3 data-i18n="desk_list_h">قائمة القراءة</h3><span class="mono" id="wishCount">0</span></header>
+          <ul class="mini-list" id="wishList"></ul>
+          <div class="dcard-act">
+            <button class="btn-outline-brass sm" id="exportList"><i class="bi bi-download"></i> <span data-i18n="desk_export">صدّر كملف نصي</span></button>
+            <button class="btn-ghost sm" id="printList"><i class="bi bi-printer"></i> <span data-i18n="desk_print">اطبع</span></button>
+          </div>
+        </article>
+
+        <!-- فواصل -->
+        <article class="dcard" data-reveal>
+          <header><i class="bi bi-bookmarks"></i><h3 data-i18n="desk_bm_h">الفواصل</h3><span class="mono" id="bmCount">0</span></header>
+          <ul class="mini-list" id="bmList"></ul>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 10 · اختيار التحرير (بطاقات بريدية مبعثرة) ══════════ -->
+<section class="sec sec-picks" id="picks">
+  <div class="container-xxl">
+    <header class="sec-head">
+      <span class="sec-num mono">08</span>
+      <div>
+        <h2 class="mask-line"><span data-i18n="picks_title">بطاقات اختيار التحرير</span></h2>
+        <p data-i18n="picks_sub">بطاقات مبعثرة على مكتبنا — مسّها لتستقيم.</p>
+      </div>
+    </header>
+    <div class="postcards" id="postcards"></div>
+  </div>
+</section>
+
+<!-- ══════════ 11 · نصوص نادرة ══════════ -->
+<section class="sec sec-rare" id="rare">
+  <div class="container-xxl">
+    <div class="rare-grid">
+      <div class="rare-copy">
+        <span class="sec-num mono">09</span>
+        <h2 class="mask-line"><span data-i18n="rare_title">خزانة النوادر</span></h2>
+        <p data-i18n="rare_sub">مخطوطات مطبوعة، طبعات أولى، ودوريات توقّفت منذ عقود — رقمنّاها بالحبر الرقمي نفسه.</p>
+        <ul class="rare-specs">
+          <li><b class="mono">174</b><span data-i18n="rare_li1">مخطوطة ممسوحة</span></li>
+          <li><b class="mono">62</b><span data-i18n="rare_li2">طبعة أولى</span></li>
+          <li><b class="mono">1890</b><span data-i18n="rare_li3">أقدم عدد دوريّة</span></li>
+        </ul>
+        <button class="btn-brass" data-open-auth="register"><i class="bi bi-key"></i> <span data-i18n="rare_btn">افتح الخزانة بعضوية</span></button>
+      </div>
+      <div class="vault" id="vault"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 12 · المؤلّفون ══════════ -->
+<section class="sec" id="authors">
+  <div class="container-xxl">
+    <header class="sec-head">
+      <span class="sec-num mono">10</span>
+      <div>
+        <h2 class="mask-line"><span data-i18n="auth_title">أصواتٌ تكتب</span></h2>
+        <p data-i18n="auth_sub">مؤلفونا المميّزون هذا الموسم.</p>
+      </div>
+    </header>
+  </div>
+  <div class="auth-marquee"><div class="am-track" id="authTrack"></div></div>
+</section>
+
+<!-- ══════════ 13 · الأرقام ══════════ -->
+<section class="sec sec-stats" id="stats">
+  <div class="container-xxl">
+    <header class="sec-head">
+      <span class="sec-num mono">11</span>
+      <div><h2 class="mask-line"><span data-i18n="stats_title">المكتبة بالأرقام</span></h2>
+      <p data-i18n="stats_sub">مقياس شهري لسلوك القراءة داخل المكتبة.</p></div>
+    </header>
+    <div class="stats-grid">
+      <div class="stat-big"><b class="mono counter" data-count="2410566">0</b><span data-i18n="stat_b1">صفحة قُرئت هذا الشهر</span></div>
+      <div class="stat-big"><b class="mono counter" data-count="83742">0</b><span data-i18n="stat_b2">إعارة نشطة</span></div>
+      <div class="stat-big"><b class="mono counter" data-count="1291">0</b><span data-i18n="stat_b3">ساعة مسموعات</span></div>
+      <div class="stat-big"><b class="mono counter" data-count="98" data-suffix="%">0</b><span data-i18n="stat_b4">رضا القراء</span></div>
+      <div class="chart-card">
+        <h4 data-i18n="stat_chart_h">أكثر الأقسام إقراضاً</h4>
+        <div class="bars" id="statBars"></div>
+      </div>
+      <div class="donut-card">
+        <h4 data-i18n="stat_donut_h">نسبة القراءة العربية</h4>
+        <div class="donut">
+          <svg viewBox="0 0 120 120"><circle class="d-bg" cx="60" cy="60" r="50"/><circle class="d-fg" id="donutFg" cx="60" cy="60" r="50"/></svg>
+          <b class="mono">68%</b>
+        </div>
+        <p class="hint" data-i18n="stat_donut_p">من إجمالي الصفحات المقروءة خلال 2026.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 14 · تحدي القراءة ══════════ -->
+<section class="sec sec-challenge" id="challenge">
+  <div class="container-xxl">
+    <div class="ch-grid">
+      <div class="ch-ring-wrap">
+        <svg viewBox="0 0 200 200" class="ch-ring">
+          <circle class="cr-bg" cx="100" cy="100" r="86"/>
+          <circle class="cr-fg" id="chRing" cx="100" cy="100" r="86"/>
+        </svg>
+        <div class="ch-center"><b class="mono" id="chPct">0%</b><span data-i18n="ch_done">من الهدف</span></div>
+      </div>
+      <div class="ch-copy">
+        <span class="sec-num mono">12</span>
+        <h2 data-i18n="ch_title">تحدّي 2026: ثلاثون كتاباً</h2>
+        <p data-i18n="ch_sub">أضف صفحاتك المقروءة، وتابع معالم الطريق — كل عتبة تفتح شارة جديدة.</p>
+        <div class="ch-add">
+          <input type="number" id="chPages" min="1" max="2000" value="40" class="mono">
+          <button class="btn-brass" id="chAdd"><i class="bi bi-plus-lg"></i> <span data-i18n="ch_add">سجّل صفحات</span></button>
+          <button class="btn-ghost" id="chReset"><i class="bi bi-arrow-counterclockwise"></i></button>
+        </div>
+        <div class="ch-mile" id="chMiles"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 15 · الندوات ══════════ -->
+<section class="sec" id="events">
+  <div class="container-xxl">
+    <header class="sec-head">
+      <span class="sec-num mono">13</span>
+      <div><h2 class="mask-line"><span data-i18n="ev_title">نادي القراءة والندوات</span></h2>
+      <p data-i18n="ev_sub">لقاءات أسبوعية، حضورية وبثّاً مباشر.</p></div>
+    </header>
+    <div class="timeline" id="timeline"></div>
+  </div>
+</section>
+
+<!-- ══════════ 16 · آراء القراء ══════════ -->
+<section class="sec sec-voices" id="voices">
+  <div class="container-xxl">
+    <header class="sec-head">
+      <span class="sec-num mono">14</span>
+      <div><h2 class="mask-line"><span data-i18n="voi_title">ماذا يقول القرّاء؟</span></h2></div>
+    </header>
+    <div class="voice-stage">
+      <blockquote id="voiceQuote"></blockquote>
+      <div class="voice-meta">
+        <span class="avatar lg" id="voiceAv"></span>
+        <div><b id="voiceName"></b><small class="mono" id="voiceRole"></small></div>
+      </div>
+      <div class="voice-dots" id="voiceDots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 17 · العضويات (سُلَّم متراكب) ══════════ -->
+<section class="sec sec-plans" id="plans">
+  <div class="container-xxl">
+    <header class="sec-head">
+      <span class="sec-num mono">15</span>
+      <div><h2 class="mask-line"><span data-i18n="plan_title">ثلاث درجات عضوية</span></h2>
+      <p data-i18n="plan_sub">اضغط البطاقة لتستقيم وتكشف كامل مزاياها.</p></div>
+    </header>
+    <div class="ladder-plans" id="planLadder"></div>
+  </div>
+</section>
+
+<!-- ══════════ 18 · الأسئلة ══════════ -->
+<section class="sec sec-tint" id="faq">
+  <div class="container-xxl faq-wrap">
+    <header class="sec-head">
+      <span class="sec-num mono">16</span>
+      <div><h2 class="mask-line"><span data-i18n="faq_title">أسئلةٌ تصل كثيراً</span></h2></div>
+    </header>
+    <div class="accordion accordion-flush" id="faqAcc"></div>
+  </div>
+</section>
+
+<!-- ══════════ 19 · النشرة ══════════ -->
+<section class="sec news" id="newsletter">
+  <div class="container-xxl">
+    <div class="news-box">
+      <div class="news-copy">
+        <i class="bi bi-envelope-paper news-ico"></i>
+        <h2 data-i18n="news_title">بريد المكتبة الأسبوعي</h2>
+        <p data-i18n="news_sub">خمسة عناوين مختارة، مقتطف واحد، وتنبيه بالعدد الجديد — كل يوم أحد.</p>
+      </div>
+      <form class="news-form" id="newsForm" novalidate>
+        <input type="email" id="newsMail" required data-i18n-ph="news_ph" placeholder="بريدك الإلكتروني">
+        <button type="submit" class="btn-brass" data-i18n="news_btn">اشترك مجاناً</button>
+      </form>
+      <div class="news-note mono"><i class="bi bi-lock"></i> <span data-i18n="news_note">لا رسائل ترويجية. إلغاء الاشتراك بنقرة.</span></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ══════════ التذييل ══════════ -->
+<footer class="foot">
+  <div class="container-xxl">
+    <div class="foot-grid">
+      <div class="f-brand">
+        <a class="brand" href="#home">
+          <span class="brand-mark"><i></i><i></i><i></i><i></i></span>
+          <span class="brand-txt"><b data-i18n="brand">مكتبة قراءة</b><small class="mono">QIRĀʿA · EST. 2013</small></span>
+        </a>
+        <p data-i18n="ft_about">مكتبة عامة رقمية، مستقلة، بلا إعلانات. فهرسة مفتوحة، وإعارة عادلة، ونسخة قابلة للتنزيل لكل من يسجّل.</p>
+        <div class="socials">
+          <a href="#" aria-label="X"><i class="bi bi-twitter-x"></i></a>
+          <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+          <a href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+          <a href="#" aria-label="Telegram"><i class="bi bi-telegram"></i></a>
+          <a href="#" aria-label="GitHub"><i class="bi bi-github"></i></a>
+        </div>
+      </div>
+
+      <div class="f-col"><h5 data-i18n="ft_links">المكتبة</h5><ul>
+        <li><a href="#catalog" data-i18n="nav_catalog">الفهرس</a></li>
+        <li><a href="#magazines" data-i18n="nav_mag">المجلات</a></li>
+        <li><a href="#stories" data-i18n="nav_stories">القصص</a></li>
+        <li><a href="#audio" data-i18n="nav_audio">المسموعات</a></li>
+        <li><a href="#rare" data-i18n="nav_rare">النوادر</a></li>
+        <li><a href="#events" data-i18n="nav_events">الندوات</a></li>
+      </ul></div>
+
+      <div class="f-col"><h5 data-i18n="ft_cats">أقسام سريعة</h5><ul id="footCats"></ul></div>
+
+      <div class="f-col"><h5 data-i18n="ft_tools">أدوات</h5><ul>
+        <li><a href="#desk" data-i18n="nav_desk">طاولة القارئ</a></li>
+        <li><a href="#challenge" data-i18n="ch_title_short">تحدّي القراءة</a></li>
+        <li><a href="#" id="openPalette">لوحة الأوامر <kbd class="mono">⌘K</kbd></a></li>
+        <li><a href="#" data-open-auth="login" data-i18n="btn_login">تسجيل الدخول</a></li>
+        <li><a href="#" data-open-auth="register" data-i18n="btn_register">حساب جديد</a></li>
+      </ul></div>
+
+      <div class="f-col f-contact">
+        <h5 data-i18n="ft_contact">تواصل</h5>
+        <p><i class="bi bi-geo-alt"></i> <span data-i18n="ft_addr">شارع الكتب 14، حيّ الثقافة</span></p>
+        <p><i class="bi bi-telephone"></i> <span class="mono" dir="ltr">+970 2 555 0142</span></p>
+        <p><i class="bi bi-envelope"></i> <span class="mono">salama@qira.ae</span></p>
+        <div class="hours">
+          <b data-i18n="ft_hours">مواعيد الفرع</b>
+          <span class="mono">Sat–Thu · 09:00 → 21:00</span>
+          <span class="mono">Fri · 14:00 → 22:00</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-bar">
+      <span class="mono">© 2026 <span data-i18n="brand">مكتبة قراءة</span> — <span data-i18n="ft_rights">جميع الحقوق محفوظة</span></span>
+      <nav class="foot-legal">
+        <a href="#" data-i18n="ft_privacy">الخصوصية</a><a href="#" data-i18n="ft_terms">الشروط</a><a href="#" data-i18n="ft_access">إتاحة WCAG</a><a href="#" data-i18n="ft_api">API للفهرس</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="أعلى"><i class="bi bi-arrow-up"></i></button>
+
+<!-- ══════════ نافذة الدخول / التسجيل / زائر ══════════ -->
+<div class="modal fade auth-modal" id="authModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content auth-shell">
+      <button class="modal-x" data-bs-dismiss="modal" aria-label="إغلاق"><i class="bi bi-x-lg"></i></button>
+
+      <aside class="auth-side">
+        <div class="as-lines"></div>
+        <span class="mono as-tag">MEMBERS ONLY</span>
+        <h3 data-i18n="au_side_h">ادخل، وسنُكمل من حيث توقّفت</h3>
+        <p data-i18n="au_side_p">حساب واحد يزامن قائمتك، فواصلك، ملاحظاتك، وتقدّم تحدّي القراءة بين كل أجهزتك.</p>
+        <ul class="as-perks">
+          <li><i class="bi bi-check2"></i> <span data-i18n="au_perk1">إعارة حتى 6 كتب دفعة واحدة</span></li>
+          <li><i class="bi bi-check2"></i> <span data-i18n="au_perk2">تنزيل PDF وEPUB بلا watermark</span></li>
+          <li><i class="bi bi-check2"></i> <span data-i18n="au_perk3">وصول خزانة النوادر والندوات المباشرة</span></li>
+        </ul>
+        <div class="as-demo">
+          <b class="mono" data-i18n="au_demo_h">حساب تجريبي</b>
+          <span class="mono">reader@qira.ae</span><span class="mono">123456</span>
+          <button class="btn-ghost sm" id="fillDemo" data-i18n="au_demo_btn">املأ البيانات</button>
+        </div>
+      </aside>
+
+      <div class="auth-main">
+        <div class="auth-tabs" role="tablist">
+          <button class="atab active" data-bs-toggle="tab" data-bs-target="#tabLogin" data-i18n="au_login">دخول</button>
+          <button class="atab" data-bs-toggle="tab" data-bs-target="#tabReg" data-i18n="au_register">حساب جديد</button>
+          <button class="atab" data-bs-toggle="tab" data-bs-target="#tabGuest" data-i18n="au_guest">زائر</button>
+        </div>
+
+        <div class="tab-content">
+          <!-- دخول -->
+          <div class="tab-pane fade show active" id="tabLogin">
+            <form id="loginForm" novalidate>
+              <label class="fld"><span data-i18n="au_email">البريد الإلكتروني</span>
+                <input type="email" name="email" required data-i18n-ph="au_email_ph" placeholder="you@mail.com">
+                <em class="err mono"></em>
+              </label>
+              <label class="fld"><span data-i18n="au_pass">كلمة المرور</span>
+                <span class="pw-wrap">
+                  <input type="password" name="password" required data-i18n-ph="au_pass_ph" placeholder="••••••">
+                  <button type="button" class="pw-eye"><i class="bi bi-eye"></i></button>
+                </span>
+                <em class="err mono"></em>
+              </label>
+              <div class="row-2">
+                <label class="chk"><input type="checkbox" name="remember" checked> <span data-i18n="au_remember">تذكّرني</span></label>
+                <a href="#" class="mini-link" data-i18n="au_forgot">نسيت كلمة المرور؟</a>
+              </div>
+              <button class="btn-ink full" type="submit"><span data-i18n="au_sub_login">ادخل المكتبة</span> <i class="bi bi-box-arrow-in-left"></i></button>
+            </form>
+            <div class="au-or"><span data-i18n="au_or">أو عبر</span></div>
+            <div class="au-social">
+              <button class="soc"><i class="bi bi-google"></i> Google</button>
+              <button class="soc"><i class="bi bi-github"></i> GitHub</button>
+              <button class="soc"><i class="bi bi-apple"></i> Apple</button>
+            </div>
+          </div>
+
+          <!-- تسجيل -->
+          <div class="tab-pane fade" id="tabReg">
+            <form id="regForm" novalidate>
+              <label class="fld"><span data-i18n="au_name">الاسم الكامل</span>
+                <input type="text" name="name" required data-i18n-ph="au_name_ph" placeholder="سلامة القارئ">
+                <em class="err mono"></em>
+              </label>
+              <label class="fld"><span data-i18n="au_email">البريد الإلكتروني</span>
+                <input type="email" name="email" required data-i18n-ph="au_email_ph" placeholder="you@mail.com">
+                <em class="err mono"></em>
+              </label>
+              <div class="row-2">
+                <label class="fld"><span data-i18n="au_pass">كلمة المرور</span>
+                  <span class="pw-wrap">
+                    <input type="password" name="password" required data-i18n-ph="au_pass_ph2" placeholder="8 أحرف فأكثر">
+                    <button type="button" class="pw-eye"><i class="bi bi-eye"></i></button>
+                  </span>
+                  <span class="pw-meter"><i></i><i></i><i></i><i></i></span>
+                  <em class="err mono"></em>
+                </label>
+                <label class="fld"><span data-i18n="au_confirm">تأكيد المرور</span>
+                  <input type="password" name="confirm" required placeholder="••••••">
+                  <em class="err mono"></em>
+                </label>
+              </div>
+              <label class="fld inline">
+                <input type="checkbox" name="terms" required>
+                <span data-i18n="au_terms">أوافق على <a href="#">الشروط</a> و<a href="#">الخصوصية</a>، وأتعهّد بعدم النسخ التجاري.</span>
+                <em class="err mono"></em>
+              </label>
+              <label class="fld inline">
+                <input type="checkbox" name="news" checked>
+                <span data-i18n="au_news">أرغب بنشرة المكتبة الأسبوعية.</span>
+              </label>
+              <button class="btn-brass full" type="submit"><span data-i18n="au_sub_reg">أنشئ حسابي</span> <i class="bi bi-stars"></i></button>
+            </form>
+          </div>
+
+          <!-- زائر -->
+          <div class="tab-pane fade" id="tabGuest">
+            <div class="guest-pane">
+              <span class="gp-ico"><i class="bi bi-person-walking"></i></span>
+              <h4 data-i18n="au_guest_h">ادخل كزائر، بلا التزام</h4>
+              <p data-i18n="au_guest_p">تصفّح كامل الفهرس، اقرأ المقتطفات، واستمع للمسموعات. الإعارة والتنزيل والتحدّي تحتاج حساباً مسجّلاً.</p>
+              <ul class="gp-list">
+                <li><i class="bi bi-check2-circle"></i> <span data-i18n="au_gp1">تصفّح 128,460 عنواناً</span></li>
+                <li><i class="bi bi-check2-circle"></i> <span data-i18n="au_gp2">قراءة المقتطفات والفهارس</span></li>
+                <li><i class="bi bi-x-circle muted"></i> <span data-i18n="au_gp3">بدون إعارة أو تنزيل</span></li>
+              </ul>
+              <button class="btn-ink full" id="guestEnter"><span data-i18n="au_guest_btn">ادخل كزائر</span> <i class="bi bi-arrow-left"></i></button>
+              <small class="mono gp-note" data-i18n="au_guest_note">تُحفظ الجلسة محلياً وتنتهي تلقائياً بعد 60 دقيقة.</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ نافذة المعاينة السريعة ══════════ -->
+<div class="modal fade qv-modal" id="qvModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+    <div class="modal-content qv-shell" id="qvBody"></div>
+  </div>
+</div>
+
+<!-- ══════════ وضع القراءة ══════════ -->
+<div class="reader" id="reader" aria-hidden="true">
+  <div class="reader-bar">
+    <div class="rb-left">
+      <button class="rb-btn" id="rdClose"><i class="bi bi-x-lg"></i></button>
+      <div class="rb-title"><b id="rdTitle">—</b><small class="mono" id="rdAuthor">—</small></div>
+    </div>
+    <div class="rb-mid">
+      <div class="rb-seg">
+        <button data-rdfont="serif" class="active" data-i18n="rd_f_serif">نسخي</button>
+        <button data-rdfont="kufi" data-i18n="rd_f_kufi">كوفي</button>
+        <button data-rdfont="sans" data-i18n="rd_f_sans">حديث</button>
+      </div>
+      <label class="rb-rng"><i class="bi bi-text-size"></i><input type="range" id="rdSize" min="15" max="30" value="20"></label>
+      <label class="rb-rng"><i class="bi bi-text-indent-start"></i><input type="range" id="rdSpace" min="1.5" max="2.4" step="0.1" value="1.95"></label>
+      <button class="rb-btn" id="rdWide" title="عرض واسع"><i class="bi bi-arrows-angle-expand"></i></button>
+      <button class="rb-btn" id="rdTts" title="استمع"><i class="bi bi-volume-up"></i></button>
+      <button class="rb-btn" id="rdBm" title="فصل"><i class="bi bi-bookmark"></i></button>
+    </div>
+    <div class="rb-right"><span class="mono" id="rdProg">0%</span></div>
+  </div>
+  <div class="reader-body"><article class="reader-page" id="rdPage"></article></div>
+  <div class="reader-foot"><div class="rf-bar"><span id="rfFill"></span></div><small class="mono" data-i18n="rd_hint">مرّر للأسفل لمتابعة النص · Esc للإغلاق</small></div>
+</div>
+
+<!-- ══════════ لوحة الأوامر ══════════ -->
+<div class="palette" id="palette" aria-hidden="true">
+  <div class="pal-box">
+    <div class="pal-in"><i class="bi bi-search"></i><input id="palInput" data-i18n-ph="cp_ph" placeholder="ابحث عن كتاب أو نفّذ أمراً…"><kbd class="mono">ESC</kbd></div>
+    <div class="pal-out" id="palOut"></div>
+    <div class="pal-foot mono"><span data-i18n="cp_updown">↑↓ تنقّل</span><span data-i18n="cp_enter">Enter فتح</span><span data-i18n="cp_esc">Esc إغلاق</span></div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toasts" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
